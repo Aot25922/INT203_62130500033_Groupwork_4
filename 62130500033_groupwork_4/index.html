@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Basic Vue Js - HelloWorld App</title>
+
+  <!-- https://google.github.io/material-design-icons/#icon-font-for-the-web -->
+  <!-- Using via Google Web Fonts -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <!-- https://tailwindcss.com/docs/installation -->
+  <!-- Using Tailwind via CDN -->
+  <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+
+  <!-- https://v3.vuejs.org/guide/installation.html#release-notes -->
+  <!-- Vue CDN -->
+  <script src="https://unpkg.com/vue@next"></script>
+
+</head>
+
+<body>
+  <div id="app" class="max-w-xl mx-auto my-10 space-y-3 md:max-w-2xl font-mono">
+    <button @click="showbar" v-show="!bar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"
+        viewBox="0 0 24 24" class="fill-current hover:text-red-600">
+        <path
+          d="M23.111 20.058l-4.977-4.977c.965-1.52 1.523-3.322 1.523-5.251 0-5.42-4.409-9.83-9.829-9.83-5.42 0-9.828 4.41-9.828 9.83s4.408 9.83 9.829 9.83c1.834 0 3.552-.505 5.022-1.383l5.021 5.021c2.144 2.141 5.384-1.096 3.239-3.24zm-20.064-10.228c0-3.739 3.043-6.782 6.782-6.782s6.782 3.042 6.782 6.782-3.043 6.782-6.782 6.782-6.782-3.043-6.782-6.782zm2.01-1.764c1.984-4.599 8.664-4.066 9.922.749-2.534-2.974-6.993-3.294-9.922-.749z" />
+      </svg></button>
+    <div v-show="bar">
+      <input v-model="myinput" @keyup.enter="enter"
+        class=" px-4 w-5/6 h-14 placeholder-gray-500 placeholder-opacity-50  text-black text-2xl rounded-l-lg border-4 border-red-400 inline"
+        type="text" placeholder="Please enter text for searching photos">
+      <button @click="showbar();cancel()" class="ml-2 px-2 bg-blue-500 rounded-r-lg h-14 w-24 inline relative  text-2xl hover:bg-blue-300">Cancel</button>
+    </div>
+    <h3 class="font-mono text-2xl">Image Count:{{count}}</h3>
+    <table class="table-auto  text-2xl  border-collapse  p-10" >
+      <thead>
+        <tr class="h-14 " >
+          <th class="px-24 border border-gray-400" style="border-width: 8px"><p>Card</p></th>
+          <th  class=" border border-gray-400" style="border-width: 8px"><p class="px-20">Name</p></th>
+          <th  class=" border border-gray-400 px-10" style="border-width: 8px"><p class="w-32">Win Rates</p></th>
+          <th class=" border border-gray-400" style="border-width: 8px"><p class="px-20">Favorite</p></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-if="notfound" >
+          <td colspan="4" class="py-14"><p class="text-center text-5xl font-black ">Not Found!</p></td>
+        </tr>
+        <tr v-else="notfound" v-for="(image,index) in search" >
+          <td v-if="image.zoom" class="bg-black h-64 px-24">
+          </td>
+          <td v-else class="py-10">
+            <img :src="image.src" class=" h-60 w-auto cursor-pointer hover:opacity-50 transition delay-75 ml-12"
+              @click="addFav(index)" @mouseover="preFav(index)" @mouseleave="addFav(index)"
+              @dblclick="zoomImage(index);unzoom(index)" >
+          </td>
+          <td v-if="image.zoom" class="bg-black px-40">
+          </td>
+          <td v-else>
+            <h3 class="px-10 text-center">{{image.name}}</h3>
+          </td>
+          <td v-if="image.zoom" class="bg-black ">
+            <img :src="image.src" class=" h-96 w-64 right-40 relative py-10">
+          </td>
+          <td v-else>
+            <h3 class="px-20">{{image.rate}}</h3>
+          </td>
+          <td v-if="image.zoom" class="bg-black px-20">
+            <button class="relative bottom-36 left-10 float-right" @click="image.zoom=false">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class=" fill-current text-white ">
+              <path
+                d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6 16.094l-4.157-4.104 4.1-4.141-1.849-1.849-4.105 4.159-4.156-4.102-1.833 1.834 4.161 4.12-4.104 4.157 1.834 1.832 4.118-4.159 4.143 4.102 1.848-1.849z" />
+              </svg>
+              </button>
+          </td>
+          <td v-else><svg v-show="image.fav" :xmlns="svg" class="mx-auto fill-current text-red-600" width="40"
+              height="40" viewBox="0 0 24 24">
+              <path d="M18 1l-6 4-6-4-6 5v7l12 10 12-10v-7z" /></svg></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- my main.js -->
+  <script src="./main.js"></script>
+</body>
+
+</html>
